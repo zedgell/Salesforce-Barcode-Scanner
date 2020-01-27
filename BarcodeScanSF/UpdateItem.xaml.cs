@@ -15,7 +15,7 @@ namespace BarcodeScanSF
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class UpdateItem : ContentPage
     {
-
+        public ForceClient client;
         public string LookupVar;
         public string LookupType;
         public string id;
@@ -31,7 +31,6 @@ namespace BarcodeScanSF
                 CurrentSelected = 1;
                 BindingContext = this;
                 BarcodeText.Text = Application.Current.Properties["BarcodeVar"].ToString();
-                Console.WriteLine("Lookup Number Is: " + LookUpBy.SelectedIndex);
             }
         }
         private async void Scan_CLicked(object sender, EventArgs e)
@@ -69,16 +68,7 @@ namespace BarcodeScanSF
                 LookupVar = BarcodeText.Text;
                 LookupType = "ProductCode";
             }
-            string consumerkey = Application.Current.Properties["ConKeyText"].ToString();
-            string secretKey = Application.Current.Properties["SecretKeyText"].ToString();
-            string userName = Application.Current.Properties["UserNameText"].ToString();
-            string password = Application.Current.Properties["PasswordAndTokenText"].ToString();
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(consumerkey, secretKey, userName, password);
-            var instanceUrl = auth.InstanceUrl;
-            var accessToken = auth.AccessToken;
-            var apiVersion = auth.ApiVersion;
-            var client = new ForceClient(instanceUrl, accessToken, apiVersion);
+            await Login();
             var Products = await client.QueryAsync<Product>("SELECT Id,Name,Description,ProductCode FROM Product2 WHERE " + LookupType + " = '" + LookupVar + "' LIMIT 3");
             if (Products.Records.Count != 0)
             {
@@ -117,16 +107,7 @@ namespace BarcodeScanSF
 
         private async void Update_Clicked(object sender, EventArgs e)
         {
-            string consumerkey = Application.Current.Properties["ConKeyText"].ToString();
-            string secretKey = Application.Current.Properties["SecretKeyText"].ToString();
-            string userName = Application.Current.Properties["UserNameText"].ToString();
-            string password = Application.Current.Properties["PasswordAndTokenText"].ToString();
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(consumerkey, secretKey, userName, password);
-            var instanceUrl = auth.InstanceUrl;
-            var accessToken = auth.AccessToken;
-            var apiVersion = auth.ApiVersion;
-            var client = new ForceClient(instanceUrl, accessToken, apiVersion);
+            await Login();
             string id = ProductToUpdate.Id;
             ProductToUpdate.Name = Name.Text;
             ProductToUpdate.Description = Desc.Text;
@@ -194,6 +175,21 @@ namespace BarcodeScanSF
             var LoginPage = new SalesforceLoginDetails();
 
             await Navigation.PushAsync(LoginPage);
+        }
+
+        public async Task<string> Login()
+        {
+            string consumerkey = Application.Current.Properties["ConKeyText"].ToString();
+            string secretKey = Application.Current.Properties["SecretKeyText"].ToString();
+            string userName = Application.Current.Properties["UserNameText"].ToString();
+            string password = Application.Current.Properties["PasswordAndTokenText"].ToString();
+            var auth = new AuthenticationClient();
+            await auth.UsernamePasswordAsync(consumerkey, secretKey, userName, password);
+            var instanceUrl = auth.InstanceUrl;
+            var accessToken = auth.AccessToken;
+            var apiVersion = auth.ApiVersion;
+            client = new ForceClient(instanceUrl, accessToken, apiVersion);
+            return "Done";
         }
 
     }

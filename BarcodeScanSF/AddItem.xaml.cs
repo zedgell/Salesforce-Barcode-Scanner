@@ -16,6 +16,7 @@ namespace BarcodeScanSF
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddItem : ContentPage
     {
+        public ForceClient client;
         public string BarcodeVar;
         public string NameVar;
         public string DescVar;
@@ -43,16 +44,7 @@ namespace BarcodeScanSF
         
         private async void Submit_Clicked(object sender, EventArgs e)
         {
-            string consumerkey = Application.Current.Properties["ConKeyText"].ToString();
-            string secretKey = Application.Current.Properties["SecretKeyText"].ToString();
-            string userName = Application.Current.Properties["UserNameText"].ToString();
-            string password = Application.Current.Properties["PasswordAndTokenText"].ToString();
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(consumerkey, secretKey, userName, password);
-            var instanceUrl = auth.InstanceUrl;
-            var accessToken = auth.AccessToken;
-            var apiVersion = auth.ApiVersion;
-            var client = new ForceClient(instanceUrl, accessToken, apiVersion);
+            await Login();
             var product = new { Name = Name.Text, Description = Desc.Text, ProductCode = BarcodeText.Text };
             var Products = await client.QueryAsync<Product>("SELECT Name FROM Product2 WHERE ProductCode = '" + BarcodeText.Text + "'");
             if(Products.Records.Count == 0)
@@ -138,5 +130,19 @@ namespace BarcodeScanSF
             await Navigation.PushAsync(UpdatePage);
         }
 
+        public async Task<string> Login()
+        {
+            string consumerkey = Application.Current.Properties["ConKeyText"].ToString();
+            string secretKey = Application.Current.Properties["SecretKeyText"].ToString();
+            string userName = Application.Current.Properties["UserNameText"].ToString();
+            string password = Application.Current.Properties["PasswordAndTokenText"].ToString();
+            var auth = new AuthenticationClient();
+            await auth.UsernamePasswordAsync(consumerkey, secretKey, userName, password);
+            var instanceUrl = auth.InstanceUrl;
+            var accessToken = auth.AccessToken;
+            var apiVersion = auth.ApiVersion;
+            client = new ForceClient(instanceUrl, accessToken, apiVersion);
+            return "Done";
+        }
     }
 }
