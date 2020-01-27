@@ -133,7 +133,9 @@ namespace BarcodeScanSF
 
         private async void Update_clicked(object sender, EventArgs e)
         {
-            //TODO
+            var UpdatePage = new UpdateItem();
+
+            await Navigation.PushAsync(UpdatePage);
         }
 
     }

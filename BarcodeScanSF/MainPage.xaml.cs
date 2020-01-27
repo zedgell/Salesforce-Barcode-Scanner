@@ -39,7 +39,11 @@ namespace BarcodeScanSF
 
         private async void Update_clicked(object sender, EventArgs e)
         {
-            //TODO
+            CheckIfLoggedIn();
+
+            var UpdatePage = new UpdateItem();
+
+            await Navigation.PushAsync(UpdatePage);
         }
 
         private async void AddItem_Clicked(object sender, EventArgs e)
