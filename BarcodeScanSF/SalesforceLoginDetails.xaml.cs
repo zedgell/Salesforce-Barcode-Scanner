@@ -13,10 +13,13 @@ namespace BarcodeScanSF
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SalesforceLoginDetails : ContentPage
     {
+        private readonly SearchModel Validate;
         public string ConKeyText;
         public string UserNameText;
         public string PasswordAndTokenText;
         public string SecretKeyText;
+        public bool IsLoggedin = false;
+        public bool IsValid;
 
         public SalesforceLoginDetails()
         {
@@ -28,11 +31,6 @@ namespace BarcodeScanSF
                 Token.Text = Application.Current.Properties["TokenText"].ToString();
                 SecretKey.Text = Application.Current.Properties["SecretKeyText"].ToString();
                 ConsumerKey.Text = Application.Current.Properties["ConKeyText"].ToString();
-
-                if(Application.Current.Properties["IsLogIn"].ToString().ToLower() == "true")
-                {
-                    Edit(false);
-                }
 
             }
             else
@@ -49,36 +47,51 @@ namespace BarcodeScanSF
 
         private async void Login(object sender, EventArgs e)
         {
-            ConKeyText = ConsumerKey.Text;
-            UserNameText = UserName.Text;
-            PasswordAndTokenText = Password.Text + Token.Text;
-            SecretKeyText = SecretKey.Text;
-            var auth = new AuthenticationClient();
-            int timeout = 2000;
-            var task = auth.UsernamePasswordAsync(ConKeyText, SecretKeyText, UserNameText, PasswordAndTokenText);
-            if(await Task.WhenAny(task, Task.Delay(timeout)) == task)
+            IsValid = IsValidCheck.IsValidated;
+            if (IsValid)
             {
-                if(auth.AccessToken != null)
+                Console.WriteLine(IsValid);
+                UserNameText = UserName.Text;
+                PasswordAndTokenText = Password.Text + Token.Text;
+                SecretKeyText = SecretKey.Text;
+                ConKeyText = ConsumerKey.Text;
+                Console.WriteLine("secretKey is: " + SecretKey.Text);
+                Console.WriteLine("Secret login is: " + UserName.Text);
+                Console.WriteLine(PasswordAndTokenText);
+                Console.WriteLine(ConKeyText);
+                var auth = new AuthenticationClient();
+                int timeout = 2000;
+                var task = auth.UsernamePasswordAsync(ConKeyText, SecretKeyText, UserNameText, PasswordAndTokenText);
+                if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
                 {
-                    Application.Current.Properties["ConKeyText"] = ConKeyText;
-                    Application.Current.Properties["UserNameText"] = UserNameText;
-                    Application.Current.Properties["Password"] = Password.Text;
-                    Application.Current.Properties["TokenText"] = Token.Text;
-                    Application.Current.Properties["PasswordAndTokenText"] = PasswordAndTokenText;
-                    Application.Current.Properties["SecretKeyText"] = SecretKeyText;
-                    Application.Current.Properties["IsLogIn"] = true;
-                    await Application.Current.SavePropertiesAsync();
-                    var Main = new MainPage
+                    if (auth.AccessToken != null)
                     {
-                        consumerkey = ConKeyText,
-                        secretKey = SecretKeyText,
-                        userName = UserNameText,
-                        password = PasswordAndTokenText
-                    };
-                    Device.BeginInvokeOnMainThread(() => {
-                        DisplayAlert("LoggedIn", "LoggedIn Successfully", "OK");
-                    });
-                    await Navigation.PushAsync(Main);
+                        Application.Current.Properties["ConKeyText"] = ConKeyText;
+                        Application.Current.Properties["UserNameText"] = UserNameText;
+                        Application.Current.Properties["Password"] = Password.Text;
+                        Application.Current.Properties["TokenText"] = Token.Text;
+                        Application.Current.Properties["PasswordAndTokenText"] = PasswordAndTokenText;
+                        Application.Current.Properties["SecretKeyText"] = SecretKeyText;
+                        Application.Current.Properties["IsLogIn"] = true;
+                        await Application.Current.SavePropertiesAsync();
+                        var Main = new MainPage
+                        {
+                            consumerkey = ConKeyText,
+                            secretKey = SecretKeyText,
+                            userName = UserNameText,
+                            password = PasswordAndTokenText
+                        };
+                        Device.BeginInvokeOnMainThread(() => {
+                            DisplayAlert("LoggedIn", "LoggedIn Successfully", "OK");
+                        });
+                        await Navigation.PushAsync(Main);
+                    }
+                    else
+                    {
+                        Device.BeginInvokeOnMainThread(() => {
+                            DisplayAlert("Error", "Loggin was Unsuccessfull", "OK");
+                        });
+                    }
                 }
                 else
                 {
@@ -90,37 +103,8 @@ namespace BarcodeScanSF
             else
             {
                 Device.BeginInvokeOnMainThread(() => {
-                    DisplayAlert("Error", "Loggin was Unsuccessfull", "OK");
+                    DisplayAlert("Error", "You must fill all areas correctly!", "OK");
                 });
-            }
-        }
-
-        private void Edit_clicked(object sender, EventArgs e)
-        {
-            Edit(true);
-        }
-        
-        private void Edit(bool IsEdit)
-        {
-            if (IsEdit)
-            {
-                UserName.IsReadOnly = false;
-                Token.IsReadOnly = false;
-                Password.IsReadOnly = false;
-                ConsumerKey.IsReadOnly = false;
-                SecretKey.IsReadOnly = false;
-                Edit_Button.IsVisible = false;
-                login.IsVisible = true;
-            }
-            else
-            {
-                UserName.IsReadOnly = true;
-                Token.IsReadOnly = true;
-                Password.IsReadOnly = true;
-                ConsumerKey.IsReadOnly = true;
-                SecretKey.IsReadOnly = true;
-                Edit_Button.IsVisible = true;
-                login.IsVisible = false;
             }
         }
 
@@ -128,13 +112,18 @@ namespace BarcodeScanSF
         {
             if (Application.Current.Properties.ContainsKey("IsLogIn"))
             {
-                if (Application.Current.Properties["IsLogIn"].ToString() == "false")
+                if (Application.Current.Properties["IsLogIn"].ToString() == "False")
                 {
                     Device.BeginInvokeOnMainThread(() => {
                         DisplayAlert("Error", "Please Login To Salesforce", "OK");
                     });
                     var Login = new SalesforceLoginDetails();
                     await Navigation.PushAsync(Login);
+                    IsLoggedin = false;
+                }
+                else
+                {
+                    IsLoggedin = true;
                 }
             }
             else
@@ -144,6 +133,7 @@ namespace BarcodeScanSF
                 });
                 var Login = new SalesforceLoginDetails();
                 await Navigation.PushAsync(Login);
+                IsLoggedin = false;
             }
         }
 
@@ -156,17 +146,22 @@ namespace BarcodeScanSF
         private async void AddItem_Clicked(object sender, EventArgs e)
         {
             CheckIfLoggedIn();
-            var addItemPage = new AddItem();
-            await Navigation.PushAsync(addItemPage);
+            if (IsLoggedin)
+            {
+                var addItemPage = new AddItem();
+                await Navigation.PushAsync(addItemPage);
+            }
         }
 
         private async void Update_clicked(object sender, EventArgs e)
         {
             CheckIfLoggedIn();
+            if (IsLoggedin)
+            {
+                var UpdatePage = new UpdateItem();
 
-            var UpdatePage = new UpdateItem();
-
-            await Navigation.PushAsync(UpdatePage);
+                await Navigation.PushAsync(UpdatePage);
+            }
         }
 
 

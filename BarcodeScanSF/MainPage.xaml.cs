@@ -16,6 +16,8 @@ namespace BarcodeScanSF
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
+
+        public bool IsLoggedin = false;
         public string consumerkey;
         public string secretKey;
         public string userName;
@@ -41,29 +43,59 @@ namespace BarcodeScanSF
         {
             CheckIfLoggedIn();
 
-            var UpdatePage = new UpdateItem();
+            if (IsLoggedin)
+            {
+                var UpdatePage = new UpdateItem();
 
-            await Navigation.PushAsync(UpdatePage);
+                await Navigation.PushAsync(UpdatePage);
+            }
         }
 
         private async void AddItem_Clicked(object sender, EventArgs e)
         {
             CheckIfLoggedIn();
-            var addItemPage = new AddItem();
-            await Navigation.PushAsync(addItemPage);
+            if (IsLoggedin)
+            {
+                var addItemPage = new AddItem();
+                await Navigation.PushAsync(addItemPage);
+            }
+          
+        }
+
+        private async void Search_Clicked(object sender, EventArgs e)
+        {
+            CheckIfLoggedIn();
+            if (IsLoggedin)
+            {
+                var SearchPage = new Search();
+                await Navigation.PushAsync(SearchPage);
+            }
+
+        }
+
+        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var product = e.Item as Product;
+            var vm = BindingContext as MainViewModel;
+            vm?.ShowOrHidePoducts(product);
         }
 
         private async void CheckIfLoggedIn()
         {
             if (Application.Current.Properties.ContainsKey("IsLogIn"))
             {
-                if (Application.Current.Properties["IsLogIn"].ToString() == "false")
+                if (Application.Current.Properties["IsLogIn"].ToString() == "False")
                 {
                     Device.BeginInvokeOnMainThread(() => {
                         DisplayAlert("Error", "Please Login To Salesforce", "OK");
                     });
                     var Login = new SalesforceLoginDetails();
                     await Navigation.PushAsync(Login);
+                    IsLoggedin = false;
+                }
+                else
+                {
+                    IsLoggedin = true;
                 }
             }
             else
@@ -73,7 +105,9 @@ namespace BarcodeScanSF
                 });
                 var Login = new SalesforceLoginDetails();
                 await Navigation.PushAsync(Login);
+                IsLoggedin = false;
             }
         }
+
     }
 }

@@ -3,9 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:BarcodeScanSF"
              mc:Ignorable="d"
+             xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
              x:Class="BarcodeScanSF.SalesforceLoginDetails">
 
+
+    <ContentPage.BindingContext>
+        <local:SearchModel/>
+    </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Home"
@@ -22,42 +28,78 @@
                      Clicked="Update_clicked"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <Grid BackgroundColor="White">
+        <StackLayout Padding="30">
+            <Label Text="Type Your Login Info Below"/>
+            <BoxView HeightRequest="1" Color="LightGray" />
+            <input:FormView IsValidated="{Binding IsValidated}" x:Name="IsValidCheck">
+                <input:AdvancedEntry
+                Text="{Binding UserName}"
+                IsRequired="True"
+                Title="Place Your User Name Below"
+                Annotation="Email"
+                Placeholder="sample@domain.com"
+                AnnotationColor="#3897f0"
+                ValidationMessage="Please Enter A Valid UserName"
+                MinLength="10"
+                MaxLength="100"
+                x:Name="UserName"
+                TextColor="Black"/>
+                
+                <input:AdvancedEntry
+                Text="{Binding Password}"
+                IsRequired="True"
+                Title="Place Enter Your Password Below"
+                Annotation="Password"
+                AnnotationColor="#3897f0"
+                ValidationMessage="Please Enter A Valid Password"
+                MinLength="8"
+                MaxLength="100"
+                x:Name="Password"
+                TextColor="Black"/>
+                
+                <input:AdvancedEntry
+                Text="{Binding Token}"
+                IsRequired="True"
+                Title="Please Enter Your Security Token Below"
+                Annotation="None"
+                AnnotationColor="#3897f0"
+                ValidationMessage="Please Enter A Valid Security Token"
+                MinLength="24"
+                MaxLength="25"
+                x:Name="Token"
+                TextColor="Black"/>
+                
+                <input:AdvancedEntry
+                Text="{Binding ConsumerKey}"
+                IsRequired="True"
+                Title="Please Enter Your Consumer Key Below"
+                Annotation="None"
+                AnnotationColor="#3897f0"
+                ValidationMessage="Please Enter A Valid Consumer Key"
+                x:Name="ConsumerKey"
+                TextColor="Black"/>
+                
+                <input:AdvancedEntry
+                Text="{Binding SecretKey}"
+                IsRequired="True"
+                Title="Please Enter Secret Key Below"
+                Annotation="None"
+                AnnotationColor="#3897f0"
+                ValidationMessage="Please Enter A Valid Cosumer Key"
+                MinLength="5"
+                x:Name="SecretKey"
+                TextColor="Black"/>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="50"/>
-            </Grid.RowDefinitions>
+                <Button 
+                Command="{Binding SubmitCommand}"
+                Clicked="Login"
+                Text="Submit" BackgroundColor="#3897f0" 
+                CornerRadius="20" 
+                TextColor="White" />
 
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,10,0,0" Grid.Row="0">
+            </input:FormView>
 
-            </StackLayout>
-
-            <Grid Grid.Row="1" Margin="20,0,20,0">
-
-                <Grid.RowDefinitions>
-
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="*"/>
-
-                </Grid.RowDefinitions>
-                <Entry Grid.Row="1" Placeholder="UserName" PlaceholderColor="#bababa" FontSize="16" x:Name="UserName"/>
-                <Entry Grid.Row="2" Placeholder="Login Token" PlaceholderColor="#bababa" FontSize="16" x:Name="Token" IsPassword="True"/>
-                <Entry Grid.Row="3" Placeholder="Password" PlaceholderColor="#bababa" FontSize="16" x:Name="Password" IsPassword="True"/>
-                <Entry Grid.Row="4" Placeholder="Consumer Key" PlaceholderColor="#bababa" FontSize="16" x:Name="ConsumerKey" IsPassword="True"/>
-                <Entry Grid.Row="5" Placeholder="Secret Key" PlaceholderColor="#bababa" FontSize="16" x:Name="SecretKey" IsPassword="True"/>
-                <Button Text="Test LogIn" BackgroundColor="#3897f0" TextColor="White" HeightRequest="50" VerticalOptions="Start" Grid.Row="6" Clicked="Login" x:Name="login"/>
-                <Button Text="Edit" BackgroundColor="#3897f0" TextColor="White" HeightRequest="50" VerticalOptions="Start" Grid.Row="6" Clicked="Edit_clicked" IsVisible="False" x:Name="Edit_Button"/>
-
-            </Grid>
-
-        </Grid>
-        
+        </StackLayout>
     </ContentPage.Content>
+    
 </ContentPage>
