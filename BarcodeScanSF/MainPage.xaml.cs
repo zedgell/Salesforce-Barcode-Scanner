@@ -26,6 +26,9 @@ namespace BarcodeScanSF
         public string accessToken;
         public string apiVersion;
         public string Barcode;
+        public string id;
+        public Product product;
+        public ForceClient client;
 
         public MainPage()
         {
@@ -108,6 +111,66 @@ namespace BarcodeScanSF
                 IsLoggedin = false;
             }
         }
+        public async void EditButton_Clicked(object sender, EventArgs e)
+        {
+            var btn = (Button)sender;
+            id = btn.ClassId;
+            Console.WriteLine("name id: " + id);
+            var itemfound = await QueryId();
+            if (itemfound)
+            {
+                Console.WriteLine("Desc is: " + product.Description);
+                var editPage = new EditPage
+                {
+                    BindingContext = product
+                };
+                await Navigation.PushAsync(editPage);
+            }
+            else
+            {
+                Device.BeginInvokeOnMainThread(() => {
+                    DisplayAlert("Error", "Houstan we have a error", "OK");
+                });
+            }
+        }
 
+        public async Task<bool> QueryId()
+        {
+            await Login();
+            var QueryProducts = await client.QueryAllAsync<Product>("SELECT Id,Name,Description,ProductCode FROM Product2 Where Name = '" + id + "'");
+            Product p = new Product
+            {
+                Name = QueryProducts.Records[0].Name,
+                Description = QueryProducts.Records[0].Description,
+                Id = QueryProducts.Records[0].Id,
+                ProductCode = QueryProducts.Records[0].ProductCode
+            };
+
+            product = p;
+
+            if(product != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<string> Login()
+        {
+            string consumerkey = Application.Current.Properties["ConKeyText"].ToString();
+            string secretKey = Application.Current.Properties["SecretKeyText"].ToString();
+            string userName = Application.Current.Properties["UserNameText"].ToString();
+            string password = Application.Current.Properties["PasswordAndTokenText"].ToString();
+            var auth = new AuthenticationClient();
+            await auth.UsernamePasswordAsync(consumerkey, secretKey, userName, password);
+            var instanceUrl = auth.InstanceUrl;
+            var accessToken = auth.AccessToken;
+            var apiVersion = auth.ApiVersion;
+            client = new ForceClient(instanceUrl, accessToken, apiVersion);
+            return "Done";
+        }
     }
 }

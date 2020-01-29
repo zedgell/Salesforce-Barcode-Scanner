@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+             x:Class="BarcodeScanSF.EditPage">
+    <ContentPage.Content>
+        <StackLayout Padding="30">
+            <Label Text="Edit Product Below"/>
+            <BoxView HeightRequest="1" Color="LightGray"/>
+            <input:FormView>
+                <input:AdvancedEntry
+                    Text="{Binding Name}"
+                    TextColor="Black"
+                    IsRequired="True"
+                    Title="Name"
+                    MinLength="1"
+                    x:Name="NameText"/>
+                <input:AdvancedEntry
+                    Text="{Binding Description}"
+                    TextColor="Black"
+                    IsRequired="True"
+                    Title="Description"
+                    MinLength="1"
+                    x:Name="DescText"/>
+                <input:AdvancedEntry
+                    Text="{Binding ProductCode}"
+                    TextColor="Black"
+                    IsRequired="True"
+                    Title="Barcode"
+                    MinLength="1"
+                    x:Name="ProCode"/>
+                <Label Text="{Binding Id}" IsVisible="False" x:Name="IdText"/>
+                <Button BackgroundColor="Blue" CornerRadius="20" Text="Update" Clicked="UpdateButton_Clicked"/>
+                <Button BackgroundColor="Blue" CornerRadius="20" Text="Scan Barcode" Clicked="ScanBarcode_Clicked"/>
+            </input:FormView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -38,7 +38,7 @@ namespace BarcodeScanSF
                 Product p = new Product
                 {
                     Name = product.Name,
-                    Desc = product.Desc
+                    Description = product.Description
                 };
                 Products.Add(p);
                 ItemNames.Add(p.Name);
@@ -73,7 +73,7 @@ namespace BarcodeScanSF
                         Product pro = new Product
                         {
                             Name = product.Name,
-                            Desc = product.Desc
+                            Description = product.Description
                         };
                         Products.Add(pro);
                         SearchAgain.IsVisible = true;
@@ -113,7 +113,7 @@ namespace BarcodeScanSF
                 Product Pro = new Product
                 {
                     Name = product.Name,
-                    Desc = product.Desc
+                    Description = product.Description
                 };
                 Products.Add(Pro);
             }

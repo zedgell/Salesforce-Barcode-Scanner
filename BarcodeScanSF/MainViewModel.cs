@@ -49,13 +49,14 @@ namespace BarcodeScanSF
             Products = new ObservableCollection<Product>();
             ItemNames = new ObservableCollection<string>();
             await Login();
-            var QueryProducts = await client.QueryAllAsync<Product>("SELECT Name,Description FROM Product2");
+            var QueryProducts = await client.QueryAllAsync<Product>("SELECT Id,Name,Description FROM Product2");
             foreach (var product in QueryProducts.Records)
             {
                 Product P = new Product
                 {
                     Name = product.Name,
-                    Desc = product.Desc
+                    Id = product.Id,
+                    Description = product.Description
                 };
                 Products.Add(P);
                 ItemNames.Add(product.Name);

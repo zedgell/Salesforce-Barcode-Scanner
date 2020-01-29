@@ -69,7 +69,7 @@ namespace BarcodeScanSF
                 LookupType = "ProductCode";
             }
             await Login();
-            var Products = await client.QueryAsync<Product>("SELECT Id,Name,Description,ProductCode FROM Product2 WHERE " + LookupType + " = '" + LookupVar + "' LIMIT 3");
+            var Products = await client.QueryAsync<Product>("SELECT Id,Name,Description,ProductCode FROM Product2 WHERE " + LookupType + " = '" + LookupVar + "' LIMIT 4");
             if (Products.Records.Count != 0)
             {
                 if (Application.Current.Properties.ContainsKey("BarcodeVar"))

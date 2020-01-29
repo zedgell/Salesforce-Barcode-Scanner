@@ -49,17 +49,21 @@
                                     BackgroundColor="DarkGreen"
                                     TextColor="White"
                                     WidthRequest="150"
-                                    FontSize="24" />
+                                    FontSize="24" 
+                                    ClassId="{Binding Name}"/>
                                 <Button Text="Edit"
                                     BackgroundColor="DodgerBlue"
                                     TextColor="White"
                                     WidthRequest="150"
-                                    FontSize="24"/>
+                                    FontSize="24"
+                                    ClassId="{Binding Name}"
+                                    Clicked="EditButton_Clicked"/>
                                 <Button Text="Delete"
                                     BackgroundColor="DarkRed"
                                     TextColor="White"
                                     WidthRequest="150"
-                                    FontSize="24" />
+                                    FontSize="24"
+                                    ClassId="{Binding Name}"/>
                             </StackLayout>
                         </StackLayout>
                     </ViewCell>
