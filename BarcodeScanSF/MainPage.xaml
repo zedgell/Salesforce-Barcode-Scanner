@@ -10,60 +10,71 @@
              Title="Salesforce Barcode Scanner">
 
     <ContentPage.BindingContext>
-        <Local:MainViewModel/>
+        <Local:MainViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Login Info"
                      Order="Primary"
                      Priority="0"
-                     Clicked="Login_Clicked"/>
+                     Clicked="Login_Clicked" />
         <ToolbarItem Text="Add Item"
                      Order="Primary"
                      Priority="1"
-                     Clicked="AddItem_Clicked"/>
+                     Clicked="AddItem_Clicked" />
         <ToolbarItem Text="Update Item"
                      Order="Primary"
                      Priority="2"
-                     Clicked="Update_clicked"/>
+                     Clicked="Update_clicked" />
     </ContentPage.ToolbarItems>
 
     <StackLayout BackgroundColor="LightBlue">
-        <Label Text="This Is Where Your Products Will Show If You Log In" IsVisible="{Binding ShowLoginText}"/>
-        <Button Text="Search" BackgroundColor="Blue" TextColor="Black" Clicked="Search_Clicked" HorizontalOptions="FillAndExpand" HeightRequest="75"/>
+        <Label Text="This Is Where Your Products Will Show If You Log In"
+               IsVisible="{Binding ShowLoginText}" />
+        <Button Text="Search"
+                BackgroundColor="Blue"
+                TextColor="Black"
+                Clicked="Search_Clicked"
+                HorizontalOptions="FillAndExpand"
+                HeightRequest="75" />
         <ListView ItemsSource="{Binding Products}"
-              HasUnevenRows="True"
-              Margin="0,0"
-              BackgroundColor="LightBlue"
-              ItemTapped="ListView_OnItemTapped">
+                  HasUnevenRows="True"
+                  Margin="0,0"
+                  BackgroundColor="LightBlue"
+                  ItemTapped="ListView_OnItemTapped">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Padding="20">
                             <StackLayout Orientation="Horizontal">
-                                <input:CheckBox Type="Check"/>
-                                <Label Text="{Binding Name}" FontSize="30" HorizontalOptions="Center"/>
+                                <input:CheckBox Type="Check" />
+                                <Label Text="{Binding Name}"
+                                       FontSize="30"
+                                       HorizontalOptions="Center" />
                             </StackLayout>
-                            <StackLayout Orientation="Horizontal" Margin="0,30,0,0" IsVisible="{Binding IsVisible}" HorizontalOptions="Center">
+                            <StackLayout Orientation="Horizontal"
+                                         Margin="0,30,0,0"
+                                         IsVisible="{Binding IsVisible}"
+                                         HorizontalOptions="Center">
                                 <Button Text="Details"
-                                    BackgroundColor="DarkGreen"
-                                    TextColor="White"
-                                    WidthRequest="150"
-                                    FontSize="24" 
-                                    ClassId="{Binding Name}"/>
+                                        BackgroundColor="DarkGreen"
+                                        TextColor="White"
+                                        WidthRequest="150"
+                                        FontSize="24"
+                                        ClassId="{Binding Name}" />
                                 <Button Text="Edit"
-                                    BackgroundColor="DodgerBlue"
-                                    TextColor="White"
-                                    WidthRequest="150"
-                                    FontSize="24"
-                                    ClassId="{Binding Name}"
-                                    Clicked="EditButton_Clicked"/>
+                                        BackgroundColor="DodgerBlue"
+                                        TextColor="White"
+                                        WidthRequest="150"
+                                        FontSize="24"
+                                        ClassId="{Binding Name}"
+                                        Clicked="EditButton_Clicked" />
                                 <Button Text="Delete"
-                                    BackgroundColor="DarkRed"
-                                    TextColor="White"
-                                    WidthRequest="150"
-                                    FontSize="24"
-                                    ClassId="{Binding Name}"/>
+                                        BackgroundColor="DarkRed"
+                                        TextColor="White"
+                                        WidthRequest="150"
+                                        FontSize="24"
+                                        ClassId="{Binding Name}" />
                             </StackLayout>
                         </StackLayout>
                     </ViewCell>

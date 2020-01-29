@@ -12,56 +12,50 @@
         <ToolbarItem Text="Home"
                      Order="Primary"
                      Priority="0"
-                     Clicked="Home_clicked"/>
+                     Clicked="Home_clicked" />
         <ToolbarItem Text="Login Info"
                      Order="Primary"
                      Priority="1"
-                     Clicked="Login_Clicked"/>
+                     Clicked="Login_Clicked" />
         <ToolbarItem Text="Update Item"
                      Order="Primary"
                      Priority="2"
-                     Clicked="Update_clicked"/>
+                     Clicked="Update_clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid BackgroundColor="White">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,10,0,0" Grid.Row="0">
-
             </StackLayout>
 
             <Grid Grid.Row="1" Margin="20,0,20,0">
 
                 <Grid.RowDefinitions>
 
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="*"/>
-
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Entry Grid.Row="1" Placeholder="Product Name" PlaceholderColor="#bababa" FontSize="16" x:Name="Name"/>
-                <Entry Grid.Row="2" Placeholder="Product Description" PlaceholderColor="#bababa" FontSize="16" x:Name="Desc"/>
+                <Entry Grid.Row="1" Placeholder="Product Name" PlaceholderColor="#bababa" FontSize="16" x:Name="Name" />
+                <Entry Grid.Row="2" Placeholder="Product Description" PlaceholderColor="#bababa" FontSize="16" x:Name="Desc" />
                 <Entry Grid.Row="3" Placeholder="Product BarCode" PlaceholderColor="#bababa" FontSize="16" x:Name="BarcodeText" IsVisible="False" Keyboard="Numeric">
                     <Entry.Behaviors>
                         <local:NumberOnlyBehaviour />
                     </Entry.Behaviors>
                 </Entry>
-                <Button Text="Scan Barcode" BackgroundColor="#3897f0" TextColor="White" HeightRequest="50" VerticalOptions="Start" Grid.Row="4" x:Name="Scan" Clicked="Scan_CLicked"/>
-                <Button Text="Enter Manualy" BackgroundColor="#3897f0" TextColor="White" HeightRequest="50" VerticalOptions="Start" Grid.Row="5" x:Name="EnterManual" Clicked="EnterManual_click"/>
-                <Button Text="Submit" BackgroundColor="#3897f0" TextColor="White" HeightRequest="50" VerticalOptions="Start" Grid.Row="5" x:Name="Submit" IsVisible="False" Clicked="Submit_Clicked"/>
-
+                <Button Text="Scan Barcode" BackgroundColor="#3897f0" TextColor="White" HeightRequest="50" VerticalOptions="Start" Grid.Row="4" x:Name="Scan" Clicked="Scan_CLicked" />
+                <Button Text="Enter Manualy" BackgroundColor="#3897f0" TextColor="White" HeightRequest="50" VerticalOptions="Start" Grid.Row="5" x:Name="EnterManual" Clicked="EnterManual_click" />
+                <Button Text="Submit" BackgroundColor="#3897f0" TextColor="White" HeightRequest="50" VerticalOptions="Start" Grid.Row="5" x:Name="Submit" IsVisible="False" Clicked="Submit_Clicked" />
             </Grid>
-
-
-
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -8,28 +8,27 @@
              xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
              x:Class="BarcodeScanSF.SalesforceLoginDetails">
 
-
     <ContentPage.BindingContext>
-        <local:SearchModel/>
+        <local:SearchModel />
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Home"
                      Order="Primary"
                      Priority="0"
-                     Clicked="Home_clicked"/>
+                     Clicked="Home_clicked" />
         <ToolbarItem Text="Add Item"
                      Order="Primary"
                      Priority="1"
-                     Clicked="AddItem_Clicked"/>
+                     Clicked="AddItem_Clicked" />
         <ToolbarItem Text="Update Item"
                      Order="Primary"
                      Priority="2"
-                     Clicked="Update_clicked"/>
+                     Clicked="Update_clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Padding="30">
-            <Label Text="Type Your Login Info Below"/>
+            <Label Text="Type Your Login Info Below" />
             <BoxView HeightRequest="1" Color="LightGray" />
             <input:FormView IsValidated="{Binding IsValidated}" x:Name="IsValidCheck">
                 <input:AdvancedEntry
@@ -43,8 +42,8 @@
                 MinLength="10"
                 MaxLength="100"
                 x:Name="UserName"
-                TextColor="Black"/>
-                
+                TextColor="Black" />
+
                 <input:AdvancedEntry
                 Text="{Binding Password}"
                 IsRequired="True"
@@ -55,8 +54,8 @@
                 MinLength="8"
                 MaxLength="100"
                 x:Name="Password"
-                TextColor="Black"/>
-                
+                TextColor="Black" />
+
                 <input:AdvancedEntry
                 Text="{Binding Token}"
                 IsRequired="True"
@@ -67,8 +66,8 @@
                 MinLength="24"
                 MaxLength="25"
                 x:Name="Token"
-                TextColor="Black"/>
-                
+                TextColor="Black" />
+
                 <input:AdvancedEntry
                 Text="{Binding ConsumerKey}"
                 IsRequired="True"
@@ -77,8 +76,8 @@
                 AnnotationColor="#3897f0"
                 ValidationMessage="Please Enter A Valid Consumer Key"
                 x:Name="ConsumerKey"
-                TextColor="Black"/>
-                
+                TextColor="Black" />
+
                 <input:AdvancedEntry
                 Text="{Binding SecretKey}"
                 IsRequired="True"
@@ -88,18 +87,15 @@
                 ValidationMessage="Please Enter A Valid Cosumer Key"
                 MinLength="5"
                 x:Name="SecretKey"
-                TextColor="Black"/>
+                TextColor="Black" />
 
-                <Button 
+                <Button
                 Command="{Binding SubmitCommand}"
                 Clicked="Login"
-                Text="Submit" BackgroundColor="#3897f0" 
-                CornerRadius="20" 
+                Text="Submit" BackgroundColor="#3897f0"
+                CornerRadius="20"
                 TextColor="White" />
-
             </input:FormView>
-
         </StackLayout>
     </ContentPage.Content>
-    
 </ContentPage>

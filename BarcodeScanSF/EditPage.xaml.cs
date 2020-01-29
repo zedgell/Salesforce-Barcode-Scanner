@@ -1,9 +1,6 @@
 ﻿using Salesforce.Common;
 using Salesforce.Force;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -15,8 +12,8 @@ namespace BarcodeScanSF
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class EditPage : ContentPage
     {
-        public Product product;
         public ForceClient client;
+        public Product product;
 
         public EditPage()
         {
@@ -31,34 +28,6 @@ namespace BarcodeScanSF
             }
         }
 
-
-        public async void UpdateButton_Clicked(object sender, EventArgs e)
-        {
-            Product p = new Product
-            {
-                Name = NameText.Text,
-                Description = DescText.Text,
-                Id = IdText.Text,
-                ProductCode = ProCode.Text
-            };
-            string id = p.Id;
-            p.Id = null;
-            await Login();
-            var success = await client.UpdateAsync("Product2", id, p);
-            if(success != null)
-            {
-                Device.BeginInvokeOnMainThread(() => {
-                    Navigation.PushAsync(new MainPage());
-                    DisplayAlert("Success", "We Have Update The Product", "OK");
-                });
-            }
-            else
-            {
-                Device.BeginInvokeOnMainThread(() => {
-                    DisplayAlert("Error", "Houstan we have a error", "OK");
-                });
-            }
-        }
         public async Task<string> Login()
         {
             string consumerkey = Application.Current.Properties["ConKeyText"].ToString();
@@ -82,7 +51,8 @@ namespace BarcodeScanSF
             }
             await Application.Current.SavePropertiesAsync();
             var scanPage = new ZXingScannerPage();
-            scanPage.OnScanResult += (result) => {
+            scanPage.OnScanResult += (result) =>
+            {
                 // Stop scanning
                 scanPage.IsScanning = false;
                 string BarcodeVar = result.Text;
@@ -92,7 +62,8 @@ namespace BarcodeScanSF
                 Application.Current.Properties["EditBarcode"] = BarcodeVar;
                 Application.Current.SavePropertiesAsync();
                 // Pop the page and show the result
-                Device.BeginInvokeOnMainThread(() => {
+                Device.BeginInvokeOnMainThread(() =>
+                {
                     Navigation.PushAsync(new EditPage());
                     DisplayAlert("Scanned Barcode", BarcodeVar, "OK");
                 });
@@ -100,12 +71,42 @@ namespace BarcodeScanSF
             await Navigation.PushAsync(scanPage);
         }
 
+        public async void UpdateButton_Clicked(object sender, EventArgs e)
+        {
+            Product p = new Product
+            {
+                Name = NameText.Text,
+                Description = DescText.Text,
+                Id = IdText.Text,
+                ProductCode = ProCode.Text
+            };
+            string id = p.Id;
+            p.Id = null;
+            await Login();
+            var success = await client.UpdateAsync("Product2", id, p);
+            if (success != null)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Navigation.PushAsync(new MainPage());
+                    DisplayAlert("Success", "We Have Update The Product", "OK");
+                });
+            }
+            else
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    DisplayAlert("Error", "Houstan we have a error", "OK");
+                });
+            }
+        }
+
         public class Product
         {
-            public string Name { get; set; }
             public string Description { get; set; }
-            public string ProductCode { get; set; }
             public string Id { get; set; }
+            public string Name { get; set; }
+            public string ProductCode { get; set; }
         }
     }
 }

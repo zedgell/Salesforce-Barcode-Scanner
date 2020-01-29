@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Xamarin.Forms;
 
 namespace BarcodeScanSF
 {
-    class NumberOnlyBehaviour : Behavior<Entry>
+    internal class NumberOnlyBehaviour : Behavior<Entry>
     {
         protected override void OnAttachedTo(Entry entry)
         {
@@ -22,7 +19,6 @@ namespace BarcodeScanSF
 
         private static void OnEntryTextChanged(object sender, TextChangedEventArgs args)
         {
-
             if (!string.IsNullOrWhiteSpace(args.NewTextValue))
             {
                 bool isValid = args.NewTextValue.ToCharArray().All(x => char.IsDigit(x));

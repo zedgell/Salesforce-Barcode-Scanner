@@ -1,48 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Collections.ObjectModel;
+﻿using Salesforce.Common;
 using Salesforce.Force;
-using Xamarin.Forms;
-using Salesforce.Common;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace BarcodeScanSF
 {
-
-    class MainViewModel
+    internal class MainViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         public ForceClient client;
-        private Product _oldProduct;
-        public ObservableCollection<Product> Products { get; set; }
-        public ObservableCollection<string> ItemNames { get; set; }
+
         public bool IsLoggedin = false;
-        public bool ShowLoginText { get; set; } = false;
-        public bool ShowSearchButton { get; set; } = false;
+
+        private Product _oldProduct;
 
         public MainViewModel()
         {
             Run();
         }
 
-        public void Run()
-        {
-            CheckIfLoggedIn();
-            if (IsLoggedin)
-            {
-                ShowSearchButton = true;
-                ShowLoginText = false;
-                GetProducts();
-            }
-            else
-            {
-                ShowSearchButton = false;
-                ShowLoginText = true;
-            }
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public ObservableCollection<string> ItemNames { get; set; }
+        public ObservableCollection<Product> Products { get; set; }
+        public bool ShowLoginText { get; set; } = false;
+        public bool ShowSearchButton { get; set; } = false;
 
         public async void GetProducts()
         {
@@ -60,6 +43,37 @@ namespace BarcodeScanSF
                 };
                 Products.Add(P);
                 ItemNames.Add(product.Name);
+            }
+        }
+
+        public async Task<string> Login()
+        {
+            string consumerkey = Application.Current.Properties["ConKeyText"].ToString();
+            string secretKey = Application.Current.Properties["SecretKeyText"].ToString();
+            string userName = Application.Current.Properties["UserNameText"].ToString();
+            string password = Application.Current.Properties["PasswordAndTokenText"].ToString();
+            var auth = new AuthenticationClient();
+            await auth.UsernamePasswordAsync(consumerkey, secretKey, userName, password);
+            var instanceUrl = auth.InstanceUrl;
+            var accessToken = auth.AccessToken;
+            var apiVersion = auth.ApiVersion;
+            client = new ForceClient(instanceUrl, accessToken, apiVersion);
+            return "Done";
+        }
+
+        public void Run()
+        {
+            CheckIfLoggedIn();
+            if (IsLoggedin)
+            {
+                ShowSearchButton = true;
+                ShowLoginText = false;
+                GetProducts();
+            }
+            else
+            {
+                ShowSearchButton = false;
+                ShowLoginText = true;
             }
         }
 
@@ -84,28 +98,6 @@ namespace BarcodeScanSF
             _oldProduct = product;
         }
 
-        private void UpdateProducts(Product product)
-        {
-            var index = Products.IndexOf(product);
-            Products.Remove(product);
-            Products.Insert(index, product);
-        }
-
-        public async Task<string> Login()
-        {
-            string consumerkey = Application.Current.Properties["ConKeyText"].ToString();
-            string secretKey = Application.Current.Properties["SecretKeyText"].ToString();
-            string userName = Application.Current.Properties["UserNameText"].ToString();
-            string password = Application.Current.Properties["PasswordAndTokenText"].ToString();
-            var auth = new AuthenticationClient();
-            await auth.UsernamePasswordAsync(consumerkey, secretKey, userName, password);
-            var instanceUrl = auth.InstanceUrl;
-            var accessToken = auth.AccessToken;
-            var apiVersion = auth.ApiVersion;
-            client = new ForceClient(instanceUrl, accessToken, apiVersion);
-            return "Done";
-        }
-
         private void CheckIfLoggedIn()
         {
             if (Application.Current.Properties.ContainsKey("IsLogIn"))
@@ -123,6 +115,13 @@ namespace BarcodeScanSF
             {
                 IsLoggedin = false;
             }
+        }
+
+        private void UpdateProducts(Product product)
+        {
+            var index = Products.IndexOf(product);
+            Products.Remove(product);
+            Products.Insert(index, product);
         }
     }
 }
