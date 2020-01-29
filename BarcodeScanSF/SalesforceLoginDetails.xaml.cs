@@ -13,7 +13,6 @@ namespace BarcodeScanSF
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SalesforceLoginDetails : ContentPage
     {
-        private readonly SearchModel Validate;
         public string ConKeyText;
         public string UserNameText;
         public string PasswordAndTokenText;
