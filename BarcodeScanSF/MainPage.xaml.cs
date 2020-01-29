@@ -115,7 +115,6 @@ namespace BarcodeScanSF
         {
             var btn = (Button)sender;
             id = btn.ClassId;
-            Console.WriteLine("name id: " + id);
             var itemfound = await QueryId();
             if (itemfound)
             {

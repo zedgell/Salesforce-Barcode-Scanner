@@ -20,6 +20,8 @@ namespace BarcodeScanSF
         public ObservableCollection<Product> Products { get; set; }
         public ForceClient client;
         public ObservableCollection<string> ItemNames { get; set; }
+        public Product product;
+        public string id;
 
         public Search()
         {
@@ -147,6 +149,50 @@ namespace BarcodeScanSF
             var index = Products.IndexOf(product);
             Products.Remove(product);
             Products.Insert(index, product);
+        }
+
+        public async void EditButton_Clicked(object sender, EventArgs e)
+        {
+            var btn = (Button)sender;
+            id = btn.ClassId;
+            var itemfound = await QueryId();
+            if (itemfound)
+            {
+                var editPage = new EditPage
+                {
+                    BindingContext = product
+                };
+                await Navigation.PushAsync(editPage);
+            }
+            else
+            {
+                Device.BeginInvokeOnMainThread(() => {
+                    DisplayAlert("Error", "Houstan we have a error", "OK");
+                });
+            }
+        }
+        public async Task<bool> QueryId()
+        {
+            await Login();
+            var QueryProducts = await client.QueryAllAsync<Product>("SELECT Id,Name,Description,ProductCode FROM Product2 Where Name = '" + id + "'");
+            Product p = new Product
+            {
+                Name = QueryProducts.Records[0].Name,
+                Description = QueryProducts.Records[0].Description,
+                Id = QueryProducts.Records[0].Id,
+                ProductCode = QueryProducts.Records[0].ProductCode
+            };
+
+            product = p;
+
+            if (product != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

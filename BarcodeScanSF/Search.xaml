@@ -48,17 +48,21 @@ xmlns:ListCollection="clr-namespace:System.Collections.Generic;assembly=mscorlib
                                     BackgroundColor="DarkGreen"
                                     TextColor="White"
                                     WidthRequest="150"
-                                    FontSize="24" />
+                                    FontSize="24" 
+                                    ClassId="{Binding Name}"/>
                                         <Button Text="Edit"
                                     BackgroundColor="DodgerBlue"
                                     TextColor="White"
                                     WidthRequest="150"
-                                    FontSize="24"/>
+                                    FontSize="24"
+                                    Clicked="EditButton_Clicked"
+                                    ClassId="{Binding Name}"/>
                                         <Button Text="Delete"
                                     BackgroundColor="DarkRed"
                                     TextColor="White"
                                     WidthRequest="150"
-                                    FontSize="24" />
+                                    FontSize="24" 
+                                    ClassId="{Binding Name}"/>
                                     </StackLayout>
                                 </StackLayout>
                             </ViewCell>
