@@ -16,11 +16,55 @@ xmlns:ListCollection="clr-namespace:System.Collections.Generic;assembly=mscorlib
     
     <ContentPage.Content>
         <StackLayout>
-            <StackLayout>
+            <StackLayout x:Name="SearchStack">
                 <input:AutoCompleteEntry Title="Search"
                                          x:Name="AutoComplete"
                                          TextColor="Black"
                                          />
+                <Button 
+                Clicked="Search_clicked"
+                Text="Submit" BackgroundColor="#3897f0" 
+                CornerRadius="20" 
+                TextColor="White" />
+            </StackLayout>
+            <StackLayout BackgroundColor="LightBlue">
+                <Button Text="Search Again" BackgroundColor="Blue" TextColor="Black" Clicked="SearchAgain_CLicked" HorizontalOptions="FillAndExpand" HeightRequest="75" IsVisible="False" x:Name="SearchAgain"/>
+                <ListView x:Name="ProductSeen"
+              HasUnevenRows="True"
+              Margin="0,0"
+              BackgroundColor="LightBlue"
+              ItemTapped="ListView_OnItemTapped"
+              IsVisible="False">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Padding="20">
+                                    <StackLayout Orientation="Horizontal">
+                                        <input:CheckBox Type="Check"/>
+                                        <Label Text="{Binding Name}" FontSize="30" HorizontalOptions="Center"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Margin="0,30,0,0" IsVisible="{Binding IsVisible}" HorizontalOptions="Center">
+                                        <Button Text="Details"
+                                    BackgroundColor="DarkGreen"
+                                    TextColor="White"
+                                    WidthRequest="150"
+                                    FontSize="24" />
+                                        <Button Text="Edit"
+                                    BackgroundColor="DodgerBlue"
+                                    TextColor="White"
+                                    WidthRequest="150"
+                                    FontSize="24"/>
+                                        <Button Text="Delete"
+                                    BackgroundColor="DarkRed"
+                                    TextColor="White"
+                                    WidthRequest="150"
+                                    FontSize="24" />
+                                    </StackLayout>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

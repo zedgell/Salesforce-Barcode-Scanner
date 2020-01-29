@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BarcodeScanSF
 {
-    class Product
+    public class Product
     {
         public string Name { get; set; }
         public string Desc { get; set; }

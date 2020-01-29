@@ -21,6 +21,7 @@ namespace BarcodeScanSF
         public ObservableCollection<string> ItemNames { get; set; }
         public bool IsLoggedin = false;
         public bool ShowLoginText { get; set; } = false;
+        public bool ShowSearchButton { get; set; } = false;
 
         public MainViewModel()
         {
@@ -32,11 +33,13 @@ namespace BarcodeScanSF
             CheckIfLoggedIn();
             if (IsLoggedin)
             {
+                ShowSearchButton = true;
                 ShowLoginText = false;
                 GetProducts();
             }
             else
             {
+                ShowSearchButton = false;
                 ShowLoginText = true;
             }
         }

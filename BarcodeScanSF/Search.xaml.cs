@@ -15,23 +15,34 @@ namespace BarcodeScanSF
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Search : ContentPage
     {
+        public string SearchedName;
+        private Product _oldProduct;
+        public ObservableCollection<Product> Products { get; set; }
         public ForceClient client;
         public ObservableCollection<string> ItemNames { get; set; }
 
         public Search()
         {
-            run();
+            Run();
             InitializeComponent();
         }
 
-        public async void run()
+        public async void Run()
         {
             ItemNames = new ObservableCollection<string>();
+            Products = new ObservableCollection<Product>();
             await Login();
-            var QueryProducts = await client.QueryAllAsync<Product>("SELECT Name FROM Product2");
+            var QueryProducts = await client.QueryAllAsync<Product>("SELECT Name,Description FROM Product2");
             foreach (var product in QueryProducts.Records)
             {
-                ItemNames.Add(product.Name);
+                Product p = new Product
+                {
+                    Name = product.Name,
+                    Desc = product.Desc
+                };
+                Products.Add(p);
+                ItemNames.Add(p.Name);
+
             }
             AutoComplete.ItemsSource = ItemNames;
         }
@@ -49,9 +60,93 @@ namespace BarcodeScanSF
             client = new ForceClient(instanceUrl, accessToken, apiVersion);
             return "Done";
         }
-        public class Product
+        private void Search_clicked(object sender, EventArgs e)
         {
-            public string Name { get; set; }
+            SearchedName = AutoComplete.Text;
+            if (ItemNames.Contains(SearchedName))
+            {
+                foreach (var product in Products)
+                {
+                    if (product.Name == SearchedName)
+                    {
+                        Products.Clear();
+                        Product pro = new Product
+                        {
+                            Name = product.Name,
+                            Desc = product.Desc
+                        };
+                        Products.Add(pro);
+                        SearchAgain.IsVisible = true;
+                        ProductSeen.ItemsSource = Products;
+                        ProductSeen.IsVisible = true;
+                        SearchStack.IsVisible = false;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                RunCustonQuery();
+                SearchAgain.IsVisible = true;
+            }
+        }
+        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var product = e.Item as Product;
+            ShowOrHidePoducts(product);
+        }
+
+        private void SearchAgain_CLicked(object sender, EventArgs e)
+        {
+            ProductSeen.IsVisible = false;
+            SearchStack.IsVisible = true;
+            SearchAgain.IsVisible = false;
+        }
+
+        public async void RunCustonQuery()
+        {
+            Products.Clear();
+            await Login();
+            var QueryProducts = await client.QueryAllAsync<Product>("SELECT Name,Description FROM Product2 WHERE Name LIKE '%" + SearchedName + "%'");
+            foreach (var product in QueryProducts.Records)
+            {
+                Product Pro = new Product
+                {
+                    Name = product.Name,
+                    Desc = product.Desc
+                };
+                Products.Add(Pro);
+            }
+            ProductSeen.ItemsSource = Products;
+            ProductSeen.IsVisible = true;
+            SearchStack.IsVisible = false;
+        }
+        public void ShowOrHidePoducts(Product product)
+        {
+            if (_oldProduct == product)
+            {
+                product.IsVisible = !product.IsVisible;
+                UpdateProducts(product);
+            }
+            else
+            {
+                if (_oldProduct != null)
+                {
+                    _oldProduct.IsVisible = false;
+                    UpdateProducts(_oldProduct);
+                }
+                product.IsVisible = true;
+                UpdateProducts(product);
+            }
+
+            _oldProduct = product;
+        }
+
+        private void UpdateProducts(Product product)
+        {
+            var index = Products.IndexOf(product);
+            Products.Remove(product);
+            Products.Insert(index, product);
         }
     }
 }
